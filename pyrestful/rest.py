@@ -125,16 +125,18 @@ class RestHandler(tornado.web.RequestHandler):
         ''' Executes the python function for the Rest Service '''
         request_path = self.request.path
         path = request_path.split('/')
-        services_and_params = list(filter(lambda x: x != '', path))
+        services_and_params = [p for p in path if p != '']
         content_type = None
         if 'Content-Type' in self.request.headers.keys():
             content_type = self.request.headers['Content-Type']
 
         # Get all funcion names configured in the class RestHandler
-        functions = list(filter(lambda op: hasattr(getattr(self, op), '_service_name')
-                                is True and inspect.ismethod(getattr(self, op)) is True, dir(self)))
+        functions = [op for op in dir(self)
+                     if hasattr(getattr(self, op), '_service_name') and
+                     inspect.ismethod(getattr(self, op))]
+
         # Get all http methods configured in the class RestHandler
-        http_methods = list(map(lambda op: getattr(getattr(self, op), '_method'), functions))
+        http_methods = [getattr(getattr(self, op), '_method') for op in functions]
 
         if method not in http_methods:
             raise tornado.web.HTTPError(405, 'The service not have %s verb' % method)
@@ -196,13 +198,11 @@ class RestHandler(tornado.web.RequestHandler):
     def _find_params_value_of_url(self, services, url):
         ''' Find the values of path params '''
         values_of_query = list()
-        i = 0
         url_split = url.split('/')
         values = [item for item in url_split if item not in services and item != '']
         for v in values:
             if v is not None:
                 values_of_query.append(v)
-                i += 1
         return values_of_query
 
     def _find_params_value_of_arguments(self, operation):
