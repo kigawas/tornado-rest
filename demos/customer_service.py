@@ -2,14 +2,14 @@
 #
 # Copyright 2013 Rodrigo Ancavil del Pino
 #
-# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# Licensed under the Apache License, Version 2.0 (the 'License'); you may
 # not use this file except in compliance with the License. You may obtain
 # a copy of the License at
 #
 # http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# distributed under the License is distributed on an 'AS IS' BASIS, WITHOUT
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
@@ -93,7 +93,7 @@ class CustomerResource(pyrestful.rest.RestHandler):
 	def initialize(self, database):
 		self.database = database
 
-	@get(_path="/customer", _produces=mediatypes.APPLICATION_JSON)
+	@get(_path='/customer', _produces=mediatypes.APPLICATION_JSON)
 	def getListCustomer(self):
 		customers = self.database.all()
 
@@ -107,10 +107,10 @@ class CustomerResource(pyrestful.rest.RestHandler):
 
 		return response
 
-	@get(_path="/customer/{id_customer}", _types=[int], _produces=mediatypes.APPLICATION_JSON)
+	@get(_path='/customer/{id_customer}', _types=[int], _produces=mediatypes.APPLICATION_JSON)
 	def getCustomer(self, id_customer):
 		if not self.database.exists(id_customer):
-			self.gen_http_error(404,"Error 404 : do not exists the customer : %d"%id_customer)
+			self.gen_http_error(404,'Error 404 : do not exists the customer : %d'%id_customer)
 			return
 
 		customer = self.database.find(id_customer)
@@ -122,38 +122,38 @@ class CustomerResource(pyrestful.rest.RestHandler):
 		print(response)
 		return response
 
-	@post(_path="/customer", _types=[str,str], _produces=mediatypes.APPLICATION_JSON)
+	@post(_path='/customer', _types=[str,str], _produces=mediatypes.APPLICATION_JSON)
 	def createCustomer(self, name_customer, address_customer):
 		id_customer = self.database.insert(name_customer, address_customer)
 
-		return {"created_customer_id": id_customer}
+		return {'created_customer_id': id_customer}
 
-	@put(_path="/customer/{id_customer}", _types=[int,str,str], _produces=mediatypes.APPLICATION_JSON)
+	@put(_path='/customer/{id_customer}', _types=[int,str,str], _produces=mediatypes.APPLICATION_JSON)
 	def updateCustomer(self, id_customer, name_customer, address_customer):
 		if not self.database.exists(id_customer):
-			self.gen_http_error(404,"Error 404 : do not exists the customer : %d"%id_customer)
+			self.gen_http_error(404,'Error 404 : do not exists the customer : %d'%id_customer)
 			return
 		
 		updated = self.database.update(id_customer,name_customer,address_customer)
 
-		return {"updated_customer_id": id_customer, "success":updated}
+		return {'updated_customer_id': id_customer, 'success':updated}
 
-	@delete(_path="/customer/{id_customer}", _types=[int], _produces=mediatypes.APPLICATION_JSON)
+	@delete(_path='/customer/{id_customer}', _types=[int], _produces=mediatypes.APPLICATION_JSON)
 	def deleteCustomer(self,id_customer):
 		if not self.database.exists(id_customer):
-			self.gen_http_error(404,"Error 404 : do not exists the customer : %d"%id_customer)
+			self.gen_http_error(404,'Error 404 : do not exists the customer : %d'%id_customer)
 			return
 
 		deleted = self.database.delete(id_customer)
 
-		return {"delete_customer_id": id_customer, "success":deleted}
+		return {'delete_customer_id': id_customer, 'success':deleted}
 
 if __name__ == '__main__':
 	try:
-		print("Start the service")
+		print('Start the service')
 		database = CustomerDataBase()
 		app = pyrestful.rest.RestService([CustomerResource], dict(database=database))
 		app.listen(8080)
 		tornado.ioloop.IOLoop.instance().start()
 	except KeyboardInterrupt:
-		print("\nStop the service")
+		print('\nStop the service')
