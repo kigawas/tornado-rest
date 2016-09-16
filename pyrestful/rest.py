@@ -140,7 +140,7 @@ class RestHandler(tornado.web.RequestHandler):
 
         if method not in http_methods:
             raise tornado.web.HTTPError(405, 'The service not have %s verb' % method)
-        for operation in list(map(lambda op: getattr(self, op), functions)):
+        for operation in [getattr(self, op) for op in functions]:
             service_name = getattr(operation, '_service_name')
             service_params = getattr(operation, '_service_params')
             # If the _types is not specified, assumes str types for the params
@@ -148,13 +148,14 @@ class RestHandler(tornado.web.RequestHandler):
             params_types = params_types + [str] * (len(service_params) - len(params_types))
             produces = getattr(operation, '_produces')
             consumes = getattr(operation, '_consumes')
-            services_from_request = list(filter(lambda x: x in path, service_name))
+            services_from_request = [s for s in service_name if s in path]
             query_params = getattr(operation, '_query_params')
 
             if operation._method == self.request.method and service_name == services_from_request and len(service_params) + len(service_name) == len(services_and_params):
                 try:
-                    params_values = self._find_params_value_of_url(
-                        service_name, request_path) + self._find_params_value_of_arguments(operation)
+                    url_params = self._find_params_value_of_url(service_name, request_path)
+                    arg_params = self._find_params_value_of_arguments(operation)
+                    params_values = url_params + arg_params
                     p_values = self._convert_params_values(params_values, params_types)
                     if consumes is None and produces is None:
                         consumes = content_type
