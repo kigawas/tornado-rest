@@ -164,7 +164,7 @@ if __name__ == '__main__':
         print('Start the service')
         database = CustomerDataBase()
         app = pyrestful.rest.RestService([CustomerResource], dict(database=database))
-        app.listen(8000)
+        app.listen(8080)
         tornado.ioloop.IOLoop.instance().start()
     except KeyboardInterrupt:
         print('\nStop the service')

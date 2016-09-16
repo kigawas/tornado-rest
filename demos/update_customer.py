@@ -39,7 +39,7 @@ if len(id_customer) == 0 and len(name_customer) == 0 and len(address_customer) =
 else:
     params = urllib.urlencode({'name_customer': str(name_customer), 'address_customer': str(address_customer)})
     headers = {'Content-type': 'application/x-www-form-urlencoded'}
-    conn = httplib.HTTPConnection('localhost:8000')
+    conn = httplib.HTTPConnection('localhost:8080')
 
     conn.request('PUT', '/customer/%s' % id_customer, params, headers)
 

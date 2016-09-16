@@ -65,7 +65,7 @@ if __name__ == '__main__':
     try:
         print('Start the service')
         app = pyrestful.rest.RestService([BookResource])
-        app.listen(8000)
+        app.listen(8080)
         tornado.ioloop.IOLoop.instance().start()
     except KeyboardInterrupt:
         print('\nStop the service')

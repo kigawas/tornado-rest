@@ -15,7 +15,7 @@ if __name__ == '__main__':
     try:
         print('Start the echo service')
         app = pyrestful.rest.RestService([EchoService])
-        app.listen(8000)
+        app.listen(8080)
         tornado.ioloop.IOLoop.instance().start()
     except KeyboardInterrupt:
         print('\nStop the echo service')

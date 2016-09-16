@@ -34,7 +34,7 @@ id_customer = raw_input('Id Customer      : ')
 if len(id_customer) == 0:
     print('You must indicates id of customer')
 else:
-    conn = httplib.HTTPConnection('localhost:8000')
+    conn = httplib.HTTPConnection('localhost:8080')
 
     conn.request('DELETE', '/customer/%s' % id_customer)
 
